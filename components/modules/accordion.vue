@@ -15,7 +15,16 @@
 <script lang="ts">
 import Vue from 'vue';
 export default Vue.extend({
-  props: ['accordionData'],
+  props: {
+    accordionData: {
+      type: Array,
+      default: [],
+    },
+    multiple: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       active: null as any,
@@ -42,17 +51,24 @@ export default Vue.extend({
         descriptionElement.style.maxHeight = null;
       } else {
         //* remove active class and max height from all items
-        allItems.forEach((element: any) => {
-          element.classList.remove('active');
-          element.querySelector(
-            '.accordion-description-wrapper'
-          ).style.maxHeight = null;
-        });
-        //* add active class and max height for clicked item
-        parentElement.classList.add('active');
-        descriptionElement.style.maxHeight = `${
-          descriptionElementMaxHeight + 40
-        }px`;
+        if (this.multiple) {
+          parentElement.classList.add('active');
+          descriptionElement.style.maxHeight = `${
+            descriptionElementMaxHeight + 40
+          }px`;
+        } else {
+          allItems.forEach((element: any) => {
+            element.classList.remove('active');
+            element.querySelector(
+              '.accordion-description-wrapper'
+            ).style.maxHeight = null;
+          });
+          //* add active class and max height for clicked item
+          parentElement.classList.add('active');
+          descriptionElement.style.maxHeight = `${
+            descriptionElementMaxHeight + 40
+          }px`;
+        }
       }
     },
   },
